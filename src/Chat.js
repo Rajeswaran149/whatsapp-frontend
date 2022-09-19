@@ -2,13 +2,35 @@ import MoreVert from '@mui/icons-material/MoreVert'
 import Search from '@mui/icons-material/Search'
 import { Avatar, IconButton } from '@mui/material'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import React from 'react'
-import "./Chat.css"
-// import SelectInput from '@mui/material/Select/SelectInput';
+import React, { useState } from 'react'
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import MicIcon from '@mui/icons-material/Mic';
+import axios from "./axios";
+import moment from 'moment';
+import SendIcon from '@mui/icons-material/Send';
 
 
-const Chat = () => {
+import "./Chat.css"
+
+
+const Chat = ({ messages }) => {
+
+  const [input,setInput] = useState("");
+
+const sendMessage = async(e) => {
+  e.preventDefault();
+  const time = moment().format('LT')
+  await axios.post('/messages/new',{
+    message: input,
+    name: "rajes",
+    timestamp: time,
+    received : true,
+  });
+  
+   setInput("");
+
+}
+
   return (
     <div className="chat">
 
@@ -32,36 +54,27 @@ const Chat = () => {
         </div>
       </div>
       <div className="chat__body">
-        <p className="chat__message">
-          <span className="chat__name">Sonny</span>
+        {messages.map((message) => (
+          <p className={`chat__message ${message.received && "chat__receiver"}`}>
+            <span className="chat__name">{message.name}</span>
+            {message.message}
+            <span className="chat__timestamp">
+              {message.timestamp}
+            </span>
+          </p>
+        ))}
 
-          This is a message
-
-          <span className="chat__timestamp">
-            {new Date().toUTCString()}
-          </span>
-        </p>
-        <p className="chat__message chat__receiver">
-          <span className="chat__name">Sonny</span>
-
-          This is a message
-
-          <span className="chat__timestamp">
-            {new Date().toUTCString()}
-          </span>
-        </p>
       </div>
+      
       <div className="chat__footer">
         <InsertEmoticonIcon />
-        
+
         <form>
-          <input placeholder="Type a message"
-            type="text"
-          />
-          <button type="submit">
-            send a message
-          </button>
+          <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message" type="text" />
+          <SendIcon className="send" onClick={sendMessage} type="submit"></SendIcon>
+          {/* <button onClick={sendMessage} type="submit">send a message</button> */}
         </form>
+        <MicIcon />
       </div>
 
     </div>
