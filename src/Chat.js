@@ -66,6 +66,7 @@ const sendMessage = async(e) => {
 
       </div>
       
+      
       <div className="chat__footer">
         <InsertEmoticonIcon />
 
