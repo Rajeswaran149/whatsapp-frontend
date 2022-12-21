@@ -5,4 +5,5 @@ const instance = axios.create({
   baseURL: "https://whatsapp-backend-nine.vercel.app",
 });
 
+// updated vercel url
 export default instance;
